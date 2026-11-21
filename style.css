@@ -1,0 +1,129 @@
+:root {
+  --fundo: #eef1ec;
+  --tinta: #14232b;
+  --chip: #1b2b34;
+  --chip-texto: #f2f4ef;
+  --cobre: #c2703a;
+  --papel: #fbfaf5;
+  --acerto: #2f7d4f;
+  --borda: #b9c3bd;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px 16px 48px;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+header, main { max-width: 980px; margin: 0 auto; }
+
+h1 { margin: 0 0 4px; font-size: 2rem; letter-spacing: -0.01em; }
+header p { margin: 0 0 20px; font-size: 1.05rem; }
+
+.painel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+}
+
+button {
+  margin-left: auto;
+  padding: 8px 18px;
+  border: 2px solid var(--tinta);
+  background: var(--papel);
+  color: var(--tinta);
+  font: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover { background: var(--tinta); color: var(--papel); }
+button:focus-visible, .carta:focus-visible { outline: 3px solid var(--cobre); outline-offset: 2px; }
+
+#tabuleiro {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.carta {
+  position: relative;
+  min-height: 140px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  perspective: 800px;
+  cursor: pointer;
+}
+.carta:hover { background: none; }
+
+.lado {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  backface-visibility: hidden;
+  transition: transform 0.4s;
+}
+
+.costas {
+  background: var(--chip);
+  border: 2px solid var(--cobre);
+  color: var(--cobre);
+  font-size: 2rem;
+}
+
+.frente {
+  transform: rotateY(180deg);
+  font-family: system-ui, sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  background: var(--papel);
+  border: 2px solid var(--borda);
+}
+
+.frente.sigla {
+  background: var(--chip);
+  border-color: var(--chip);
+  color: var(--chip-texto);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.carta.virada .costas { transform: rotateY(180deg); }
+.carta.virada .frente { transform: rotateY(0); }
+
+.carta.certa .frente { border-color: var(--acerto); box-shadow: 0 0 0 3px var(--acerto); }
+.carta.certa { cursor: default; }
+
+#mensagem {
+  min-height: 1.5em;
+  margin-top: 20px;
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--acerto);
+}
+
+@media (max-width: 760px) {
+  #tabuleiro { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  #tabuleiro { grid-template-columns: repeat(2, 1fr); }
+  .carta { min-height: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lado { transition: none; }
+}
