@@ -1,11 +1,12 @@
 :root {
-  --fundo: #eef1ec;
+  --fundo: #10252b;
   --tinta: #14232b;
   --chip: #1b2b34;
   --chip-texto: #f2f4ef;
   --cobre: #c2703a;
   --papel: #fbfaf5;
   --acerto: #2f7d4f;
+  --erro: #d6362f;
   --borda: #b9c3bd;
 }
 
@@ -14,15 +15,16 @@
 body {
   margin: 0;
   padding: 24px 16px 48px;
-  background: var(--fundo);
-  color: var(--tinta);
+  background: var(--fundo) url("bg.svg") repeat;
+  color: var(--chip-texto);
   font-family: Georgia, "Times New Roman", serif;
+  min-height: 100vh;
 }
 
-header, main { max-width: 980px; margin: 0 auto; }
+header, main { max-width: 1100px; margin: 0 auto; }
 
-h1 { margin: 0 0 4px; font-size: 2rem; letter-spacing: -0.01em; }
-header p { margin: 0 0 20px; font-size: 1.05rem; }
+h1 { margin: 0 0 4px; font-size: 2.2rem; letter-spacing: -0.01em; }
+header p { margin: 0 0 20px; font-size: 1.05rem; color: #cfd8d2; }
 
 .painel {
   display: flex;
@@ -30,6 +32,11 @@ header p { margin: 0 0 20px; font-size: 1.05rem; }
   align-items: center;
   gap: 16px;
   margin-bottom: 16px;
+  padding: 10px 16px;
+  background: var(--papel);
+  color: var(--tinta);
+  border-left: 6px solid var(--cobre);
+  border-radius: 4px;
   font-family: system-ui, sans-serif;
   font-weight: 600;
 }
@@ -49,7 +56,7 @@ button:focus-visible, .carta:focus-visible { outline: 3px solid var(--cobre); ou
 
 #tabuleiro {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 12px;
 }
 
@@ -83,15 +90,17 @@ button:focus-visible, .carta:focus-visible { outline: 3px solid var(--cobre); ou
   border: 2px solid var(--cobre);
   color: var(--cobre);
   font-size: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .frente {
   transform: rotateY(180deg);
   font-family: system-ui, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   line-height: 1.35;
+  color: var(--tinta);
   background: var(--papel);
-  border: 2px solid var(--borda);
+  border: 3px solid var(--borda);
 }
 
 .frente.sigla {
@@ -99,30 +108,58 @@ button:focus-visible, .carta:focus-visible { outline: 3px solid var(--cobre); ou
   border-color: var(--chip);
   color: var(--chip-texto);
   font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 1.3rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .carta.virada .costas { transform: rotateY(180deg); }
 .carta.virada .frente { transform: rotateY(0); }
 
-.carta.certa .frente { border-color: var(--acerto); box-shadow: 0 0 0 3px var(--acerto); }
+/* par certo: fica verde */
+.carta.certa .frente {
+  background: #d9f0e1;
+  border-color: var(--acerto);
+  box-shadow: 0 0 0 3px var(--acerto);
+}
+.carta.certa .frente.sigla { background: var(--acerto); color: #fff; }
 .carta.certa { cursor: default; }
+
+/* par errado: pisca vermelho */
+.carta.errada .frente { animation: piscar 0.9s ease-in-out; }
+
+@keyframes piscar {
+  0%, 100% { background: var(--papel); border-color: var(--borda); }
+  15%, 45%, 75% { background: #ffd9d6; border-color: var(--erro); box-shadow: 0 0 0 3px var(--erro); }
+  30%, 60% { background: var(--papel); border-color: var(--borda); box-shadow: none; }
+}
+.carta.errada .frente.sigla { animation-name: piscar-sigla; }
+
+@keyframes piscar-sigla {
+  0%, 100% { background: var(--chip); border-color: var(--chip); }
+  15%, 45%, 75% { background: var(--erro); border-color: var(--erro); box-shadow: 0 0 0 3px var(--erro); }
+  30%, 60% { background: var(--chip); border-color: var(--chip); box-shadow: none; }
+}
 
 #mensagem {
   min-height: 1.5em;
   margin-top: 20px;
   font-family: system-ui, sans-serif;
-  font-weight: 600;
-  color: var(--acerto);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #7be0a3;
 }
 
-@media (max-width: 760px) {
-  #tabuleiro { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1000px) {
+  #tabuleiro { grid-template-columns: repeat(4, 1fr); }
 }
-@media (max-width: 480px) {
-  #tabuleiro { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 600px) {
+  #tabuleiro { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .carta { min-height: 150px; }
+  .frente { font-size: 0.72rem; }
+}
+@media (max-width: 400px) {
+  #tabuleiro { grid-template-columns: repeat(2, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   .lado { transition: none; }
