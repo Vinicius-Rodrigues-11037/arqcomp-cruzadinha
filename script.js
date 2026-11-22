@@ -2,13 +2,17 @@ const termos = [
   { id: "cpu", sigla: "CPU", pista: "Busca e executa as instruções do computador." },
   { id: "ula", sigla: "ULA", pista: "Faz as contas e as operações lógicas dentro do processador." },
   { id: "uc", sigla: "UC", pista: "Lê cada instrução e dá as ordens aos outros componentes." },
-  { id: "registrador", sigla: "Registrador", pista: "Memória minúscula e muito rápida dentro da CPU; o acumulador é um exemplo." },
-  { id: "ram", sigla: "RAM", pista: "Memória de trabalho, volátil: guarda programas em execução e seus dados." },
+  { id: "registrador", sigla: "Registrador", pista: "Memória minúscula e muito rápida dentro da CPU" },
+  { id: "ram", sigla: "RAM", pista: "Memória de trabalho que guarda programas em execução e seus dados, é volátil." },
   { id: "rom", sigla: "ROM", pista: "Memória não volátil que guarda o firmware do equipamento." },
   { id: "eeprom", sigla: "EEPROM", pista: "Memória pequena do Arduino cujos dados sobrevivem ao desligamento." },
   { id: "flash", sigla: "Flash", pista: "Mesma tecnologia do pendrive; guarda o programa do Arduino." },
   { id: "cache", sigla: "Cache", pista: "Guarda cópia do que a CPU usou há pouco, para acesso veloz." },
-  { id: "dma", sigla: "DMA", pista: "Um controlador copia dados entre dispositivo e memória sem a CPU mover cada byte." }
+  { id: "dma", sigla: "DMA", pista: "Um controlador copia dados entre dispositivo e memória sem a CPU mover cada byte." },
+  { id: "microcontrolador", sigla: "Microcontrolador", pista: "Chip com CPU, memória e entrada e saída juntos." },
+  { id: "barramento", sigla: "Barramento", pista: "Conjunto de fios compartilhado que liga CPU, memória e entrada e saída." },
+  { id: "clock", sigla: "Clock", pista: "Relógio interno que dá o ritmo da CPU." },
+  { id: "firmware", sigla: "Firmware", pista: "Programa gravado no chip que define o comportamento do equipamento." }
 ];
 
 const tabuleiro = document.getElementById("tabuleiro");
@@ -77,14 +81,18 @@ function virar(carta) {
   } else {
     travado = true;
     atualizarPlacar();
+    const errou = primeira;
+    errou.classList.add("errada");
+    segunda.classList.add("errada");
     setTimeout(() => {
-      [primeira, segunda].forEach((c) => {
+      [errou, segunda].forEach((c) => {
+        c.classList.remove("errada");
         c.classList.remove("virada");
         c.setAttribute("aria-label", "Carta virada para baixo");
       });
       primeira = null;
       travado = false;
-    }, 1000);
+    }, 1100);
   }
 }
 
